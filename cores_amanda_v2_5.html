@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cores — Teacher Amanda</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500;1,9..144,700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; }
+  body { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; height: 100vh; }
+
+  .swatches { display: flex; flex: 1; min-height: 0; }
+  .swatch { display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; position: relative; overflow: hidden; }
+  .s1 { flex: 4; }
+  .s2 { flex: 2; }
+  .s3 { flex: 1.5; }
+  .s4 { flex: 0.8; }
+
+  .swatch-name { font-family: 'Fraunces', serif; font-style: italic; font-size: 28px; font-weight: 500; margin-bottom: 6px; }
+  .swatch-hex  { font-family: 'DM Sans', sans-serif; font-size: 13px; opacity: 0.65; }
+
+  .warning-tag  { position: absolute; top: 16px; left: 16px; font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.55); background: rgba(0,0,0,0.35); padding: 3px 8px; border-radius: 2px; }
+  .warning-text { position: absolute; top: 44px; left: 16px; right: 16px; font-size: 10px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+  .nav { height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; flex-shrink: 0; }
+  .nav-label { font-size: 10px; font-weight: 500; text-transform: uppercase; opacity: 0.5; color: #EDE8DF; width: 280px; flex-shrink: 0; }
+  .nav-step { font-family: 'Fraunces', serif; font-style: italic; font-size: 13px; color: #EDE8DF; opacity: 0.9; display: block; margin-bottom: 3px; }
+  .nav-buttons { display: flex; gap: 10px; }
+  .nav-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    padding: 10px 24px; border-radius: 4px; min-width: 52px;
+    border: 1px solid rgba(255,255,255,0.15); background: transparent;
+    color: #EDE8DF; cursor: pointer; transition: background 0.15s, border-color 0.15s;
+  }
+  .nav-btn.active { border-color: rgba(237,232,223,0.6); background: rgba(255,255,255,0.08); }
+  .nav-dots { display: flex; gap: 8px; align-items: center; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: background 0.15s; }
+  .dot.active { background: rgba(255,255,255,0.7); }
+
+  @media (max-width: 600px) {
+    .swatches { flex-direction: column; }
+    .s1 { flex: 4; }
+    .s2 { flex: 2; }
+    .s3 { flex: 1.5; }
+    .s4 { flex: 2; justify-content: flex-start; overflow: visible; padding-top: 16px; padding-bottom: 16px; }
+    .s4 .warning-tag { position: relative; top: auto; left: auto; display: inline-block; margin-bottom: 8px; }
+    .s4 .warning-text { position: relative; top: auto; left: auto; right: auto; margin-bottom: 12px; }
+    .s4 .swatch-name { margin-top: auto; }
+    .s4 .warning-tag { margin-bottom: 4px; }
+    .s4 .warning-text { flex: 1; }
+    .swatch { padding: 16px 20px; }
+    .swatch-name { font-size: 20px; }
+    .swatch-hex  { font-size: 11px; }
+    .warning-tag  { position: relative; top: auto; left: auto; display: inline-block; margin-bottom: 6px; }
+    .warning-text { position: relative; top: auto; left: auto; right: auto; margin-bottom: 8px; }
+    .nav { padding: 16px 20px; height: auto; flex-direction: column; align-items: stretch; gap: 12px; }
+    .nav > div:first-child { width: 100%; }
+    .nav-label { font-size: 10px; width: auto; }
+    .nav-buttons { display: flex; gap: 8px; }
+    .nav-btn { flex: 1; padding: 14px 0; font-size: 15px; text-align: center; min-width: 0; border-radius: 6px; }
+    .dot { width: 8px; height: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="swatches">
+  <div class="swatch s1" id="s1">
+    <span class="swatch-name" id="s1-name"></span>
+    <span class="swatch-hex"  id="s1-hex"></span>
+  </div>
+  <div class="swatch s2" id="s2">
+    <span class="swatch-name" id="s2-name"></span>
+    <span class="swatch-hex"  id="s2-hex"></span>
+  </div>
+  <div class="swatch s3" id="s3">
+    <span class="swatch-name" id="s3-name"></span>
+    <span class="swatch-hex"  id="s3-hex"></span>
+  </div>
+  <div class="swatch s4" id="s4">
+    <span class="warning-tag">⚠ acento apenas</span>
+    <span class="warning-text">Vermelho em excesso passa agressividade. Use só em botões, highlights e detalhes pontuais.</span>
+    <span class="swatch-name" id="s4-name"></span>
+    <span class="swatch-hex"  id="s4-hex"></span>
+  </div>
+</div>
+
+<div class="nav" id="nav">
+  <div style="width:280px; flex-shrink:0;">
+    <span style="display:block; font-size:9px; font-weight:500; text-transform:uppercase; color:#EDE8DF; opacity:0.4; margin-bottom:3px;" id="nav-step">Opção 1 de 3</span>
+    <span class="nav-label" id="nav-label"></span>
+  </div>
+  <div class="nav-dots" id="nav-dots-el">
+    <div class="dot active" id="dot-a" onclick="goTo('a')"></div>
+    <div class="dot"        id="dot-b" onclick="goTo('b')"></div>
+    <div class="dot"        id="dot-c" onclick="goTo('c')"></div>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn active" id="btn-a" onclick="goTo('a')">A</button>
+    <button class="nav-btn"        id="btn-b" onclick="goTo('b')">B</button>
+    <button class="nav-btn"        id="btn-c" onclick="goTo('c')">C</button>
+  </div>
+</div>
+
+<script>
+var palettes = {
+  a: {
+    label: 'Direção A — Terracota + Midnight',
+    nav: '#151E2E',
+    swatches: [
+      { bg: '#151E2E', name: 'Midnight',   hex: '#151E2E · 70%', nameColor: '#FAF9F6', hexColor: '#FAF9F6' },
+      { bg: '#2E3F5C', name: 'Navy',       hex: '#2E3F5C · 20%', nameColor: '#FAF9F6', hexColor: '#FAF9F6' },
+      { bg: '#EDE8DF', name: 'Cream',      hex: '#EDE8DF · 10%',  nameColor: '#151E2E', hexColor: '#151E2E' },
+      { bg: '#8B3A2A', name: 'Terracota',  hex: '#8B3A2A · 10%',  nameColor: '#FAF9F6', hexColor: '#FAF9F6' }
+    ]
+  },
+  b: {
+    label: 'Direção B — Cobre + Azul noite',
+    nav: '#151E2E',
+    swatches: [
+      { bg: '#151E2E', name: 'Midnight',   hex: '#151E2E · 70%', nameColor: '#FAF9F6', hexColor: '#FAF9F6' },
+      { bg: '#2E3F5C', name: 'Navy', hex: '#2E3F5C · 20%', nameColor: '#FAF9F6', hexColor: '#FAF9F6' },
+      { bg: '#EDE8DF', name: 'Cream',      hex: '#EDE8DF · 10%',  nameColor: '#151E2E', hexColor: '#151E2E' },
+      { bg: '#7A3728', name: 'Cobre',      hex: '#7A3728 · 10%',  nameColor: '#FAF9F6', hexColor: '#FAF9F6' }
+    ]
+  },
+  c: {
+    label: 'Direção C — Vinho + Midnight',
+    nav: '#151E2E',
+    swatches: [
+      { bg: '#151E2E', name: 'Midnight', hex: '#151E2E · 70%', nameColor: '#FAF9F6', hexColor: '#FAF9F6' },
+      { bg: '#2E3F5C', name: 'Navy',    hex: '#2E3F5C · 20%', nameColor: '#FAF9F6', hexColor: '#FAF9F6' },
+      { bg: '#EDE8DF', name: 'Cream',   hex: '#EDE8DF · 10%',  nameColor: '#151E2E', hexColor: '#151E2E' },
+      { bg: '#6B3030', name: 'Vinho',   hex: '#6B3030 · 10%',  nameColor: '#FAF9F6', hexColor: '#FAF9F6' }
+    ]
+  }
+};
+
+var steps = { a: 'Opção 1 de 3', b: 'Opção 2 de 3', c: 'Opção 3 de 3' };
+
+function goTo(id) {
+  var p = palettes[id];
+  document.getElementById('nav').style.background = p.nav;
+  document.getElementById('nav-label').textContent = p.label;
+  document.getElementById('nav-step').textContent = steps[id];
+  ['a','b','c'].forEach(function(k) {
+    document.getElementById('btn-' + k).classList.toggle('active', k === id);
+    document.getElementById('dot-' + k).classList.toggle('active', k === id);
+  });
+  p.swatches.forEach(function(s, i) {
+    var n = i + 1;
+    var el = document.getElementById('s' + n);
+    el.style.background = s.bg;
+    el.style.border = s.border || '';
+    document.getElementById('s' + n + '-name').textContent = s.name;
+    document.getElementById('s' + n + '-name').style.color = s.nameColor;
+    document.getElementById('s' + n + '-hex').textContent = s.hex;
+    document.getElementById('s' + n + '-hex').style.color = s.hexColor;
+  });
+}
+
+goTo('a');
+</script>
+</body>
+</html>
